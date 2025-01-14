@@ -8,6 +8,18 @@ const ideas = defineCollection({
   }),
 });
 
-console.log(ideas);
+const tools = defineCollection({
+  loader: airtableLoader({
+    base: import.meta.env.AIRTABLE_BASE,
+    table: "Tools",
+  }),
+});
 
-export const collections = { ideas };
+const persons = defineCollection({
+  loader: airtableLoader({
+    base: import.meta.env.AIRTABLE_BASE,
+    table: "Persons",
+  }),
+});
+
+export const collections = { ideas, tools, persons };

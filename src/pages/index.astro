@@ -4,12 +4,32 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 
 const allIdeas = await getCollection("ideas");
+const allPersons = await getCollection("persons");
+const allTools = await getCollection("tools");
 ---
 
 <Layout title={"HELLO"}>
   <ul>
     {
       allIdeas.map((idea) => (
+        <div>{`/ideas/${idea.id}/`}
+        {idea.data.Name}
+        </div>
+      ))
+    }
+  </ul>
+  <ul>
+    {
+      allPersons.map((idea) => (
+        <div>{`/ideas/${idea.id}/`}
+        {idea.data.Name}
+        </div>
+      ))
+    }
+  </ul>
+  <ul>
+    {
+      allTools.map((idea) => (
         <div>{`/ideas/${idea.id}/`}
         {idea.data.Name}
         </div>
