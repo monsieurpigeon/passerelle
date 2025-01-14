@@ -1,0 +1,26 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const ideas = await getCollection("ideas");
+  console.log("IDEAS COLLECTION",ideas)
+  return ideas.map((idea) => ({
+    params: {
+      id: idea.id,
+    },
+    props: { idea },
+  }));
+};
+
+type Props = { idea: CollectionEntry<"ideas"> };
+
+const { idea } = Astro.props;
+console.log("IDEDEDIE",idea)
+
+---
+
+<Layout title={idea}>
+  <h1>Name: {idea}</h1>
+</Layout>

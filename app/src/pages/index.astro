@@ -1,0 +1,19 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+const allIdeas = await getCollection("ideas");
+---
+
+<Layout title={"HELLO"}>
+  <ul>
+    {
+      allIdeas.map((idea) => (
+        <div>{`/ideas/${idea.id}/`}
+        {idea.data.Name}
+        </div>
+      ))
+    }
+  </ul>
+</Layout>
