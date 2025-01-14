@@ -1,6 +1,5 @@
 ---
-import type { GetStaticPaths } from "astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 
 const allIdeas = await getCollection("ideas");
@@ -8,32 +7,77 @@ const allPersons = await getCollection("persons");
 const allTools = await getCollection("tools");
 ---
 
-<Layout title={"HELLO"}>
-  <ul>
-    {
-      allIdeas.map((idea) => (
-        <div>{`/ideas/${idea.id}/`}
-        {idea.data.Name}
-        </div>
-      ))
-    }
-  </ul>
-  <ul>
-    {
-      allPersons.map((idea) => (
-        <div>{`/ideas/${idea.id}/`}
-        {idea.data.Name}
-        </div>
-      ))
-    }
-  </ul>
-  <ul>
-    {
-      allTools.map((idea) => (
-        <div>{`/ideas/${idea.id}/`}
-        {idea.data.Name}
-        </div>
-      ))
-    }
-  </ul>
+<Layout>
+  <div
+    class="flex flex-col gap-4 border p-4 m-8 bg-slate-300 rounded-xl shadow"
+  >
+    <div>
+      <h1 class="text-xl font-bold">Idées</h1>
+      <ul class="grid grid-cols-3 gap-4">
+        {
+          allIdeas.map((idea) => (
+            <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
+              <div>
+                <h2 class="font-semibold">
+                  {idea.data.Name} - Niveau {idea.data.Level}
+                </h2>
+                <p>{idea.data.Description}</p>
+              </div>
+
+              <div class="flex gap-2">
+                {idea.data["Name (from Stack)"]?.map((tool) => (
+                  <div class="border px-2 rounded-md shadow">{tool}</div>
+                ))}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div>
+      <h1 class="text-xl font-bold">Personnes</h1>
+      <ul class="grid grid-cols-3 gap-4">
+        {
+          allPersons.map((person) => (
+            <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
+              <h2 class="font-semibold">{person.data.Name}</h2>
+              <div class="flex gap-2">
+                {person.data["Name (from Ideas)"]?.map((idea) => (
+                  <div class="border px-2 rounded-md shadow">{idea}</div>
+                ))}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div>
+      <h1 class="text-xl font-bold">Outils</h1>
+      <ul class="grid grid-cols-3 gap-4">
+        {
+          allTools.map((tool) => (
+            <li class="border p-4 rounded bg-slate-50 shadow-md">
+              <h2 class="font-semibold">{tool.data.Name}</h2>
+              <p>{tool.data.Description}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="m-8 p-4 bg-lime-50 rounded-xl shadow">
+    <h1 class="text-xl font-bold">Les niveaux d'une idée</h1>
+    <ul>
+      <li>1 - Idée sous la douche</li>
+      <li>2 - Prototype / Croquis</li>
+      <li>3 - Produit qui aide 1 utilisateur</li>
+      <li>4 - Produit qui rapporte 1$</li>
+      <li>5 - Produit qui rapporte 10$ par mois</li>
+      <li>6 - Produit qui rapporte 100$ par mois</li>
+      <li>7 - Produit qui rapporte 1k$ par mois</li>
+      <li>8 - Produit qui rapporte 100k$ par mois</li>
+      <li>9 - Produit qui rapporte 10M$ par mois</li>
+      <li>10 - Licorne (évaluée à plus d'un milliard $)</li>
+    </ul>
+  </div>
 </Layout>
