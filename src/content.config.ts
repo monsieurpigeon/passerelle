@@ -1,10 +1,10 @@
 import { airtableLoader } from "@ascorbic/airtable-loader";
 import { defineCollection } from "astro:content";
 
-const ideas = defineCollection({
+const projects = defineCollection({
   loader: airtableLoader({
     base: import.meta.env.AIRTABLE_BASE,
-    table: "Ideas",
+    table: "Projects",
   }),
 });
 
@@ -22,4 +22,4 @@ const persons = defineCollection({
   }),
 });
 
-export const collections = { ideas, tools, persons };
+export const collections = { projects, tools, persons };

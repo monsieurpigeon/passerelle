@@ -3,102 +3,38 @@ import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 
-const allIdeas = await getCollection("ideas");
+const allProjects = await getCollection("projects");
 const allPersons = await getCollection("persons");
 const allTools = await getCollection("tools");
 ---
 
 <Layout>
   <div class="p-8 flex flex-col gap-8">
-    <h1 class="text-4xl font-bold">Annuaire</h1>
-    <div class="flex flex-col gap-4 border p-4 bg-slate-300 rounded shadow">
+    <div class="flex justify-between">
       <div>
-        <h1 class="text-xl font-bold">Outils</h1>
-        <ul class="grid grid-cols-3 gap-4">
-          {
-            allTools.map((tool) => (
-              <li class="border p-4 rounded bg-slate-50 shadow-md">
-                <h2 class="font-semibold">{tool.data.Name}</h2>
-                <p>{tool.data.Description}</p>
-              </li>
-            ))
-          }
-        </ul>
+        <h1 class="text-4xl font-bold opacity-70">La Passerelle</h1>
+        <p class="opacity-60">
+          L'annuaire augmenté de Zefrenship, la commu Indie Hacker France 🇫🇷
+        </p>
       </div>
-      <div>
-        <h1 class="text-xl font-bold">Personnes</h1>
-        <ul class="grid grid-cols-3 gap-4">
-          {
-            allPersons
-              .filter((person) => person.data.Name)
-              .map((person) => (
-                <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
-                  <div>
-                    <div class="flex items-center justify-between">
-                      <h2 class="font-semibold">{person.data.Name}</h2>
-                      <div class="flex gap-2">
-                        <a
-                          href={`https://github.com/${person.data.github}`}
-                          target="_blank"
-                        >
-                          <Icon name="mdi:github" />
-                        </a>
-                        <a
-                          href={`https://www.linkedin.com/in/${person.data.linkedin}`}
-                          target="_blank"
-                        >
-                          <Icon name="mdi:linkedin" />
-                        </a>
-                      </div>
-                    </div>
-                    <div class="flex items-center gap-2 text-slate-700">
-                      <Icon name="ic:baseline-discord" />
-                      <p class="mb-1">{person.data.discord}</p>
-                    </div>
-                  </div>
-
-                  <div class="flex gap-2">
-                    {person.data["Name (from Ideas)"]?.map((idea) => (
-                      <div class="border px-2 rounded-md shadow">{idea}</div>
-                    ))}
-                  </div>
-                </li>
-              ))
-          }
-        </ul>
+      <div class="flex text-2xl items-start">
+        <a
+          href="https://github.com/monsieurpigeon/passerelle"
+          target="_blank"
+          class="hover:opacity-70 border border-transparent p-4 rounded hover:border-slate-400 transition-all"
+        >
+          <Icon name="mdi:github" />
+        </a>
+        <a
+          href="https://discord.gg/pdpYk56SbZ"
+          target="_blank"
+          class="hover:opacity-70 border border-transparent p-4 rounded hover:border-slate-400 transition-all"
+        >
+          <Icon name="ic:baseline-discord" />
+        </a>
       </div>
-      <div>
-        <h1 class="text-xl font-bold">Idées</h1>
-        <ul class="grid grid-cols-3 gap-4">
-          {
-            allIdeas.map((idea) => (
-              <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
-                <div>
-                  <div class="flex items-center justify-between">
-                    <h2 class="font-semibold">
-                      {idea.data.Name} - Niveau {idea.data.Level}
-                    </h2>
-                    <a href={idea.data.Link} target="_blank">
-                      <Icon name="mdi:link" />
-                    </a>
-                  </div>
-
-                  <p>{idea.data.Description}</p>
-                </div>
-
-                <div class="flex gap-2">
-                  {idea.data["Name (from Stack)"]?.map((tool) => (
-                    <div class="border px-2 rounded-md shadow">{tool}</div>
-                  ))}
-                </div>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-    <div class="p-4 bg-lime-50 rounded shadow">
-      <h1 class="text-xl font-bold">Les niveaux d'une idée</h1>
+    </div><div class="p-4 bg-lime-50 rounded shadow">
+      <h1 class="text-xl font-bold">Les niveaux d'un projet</h1>
       <div class="flex items-center justify-center">
         <ul class="list-decimal list-inside text-lg p-4 flex flex-col gap-2">
           <li>Idée sous la douche</li>
@@ -111,6 +47,137 @@ const allTools = await getCollection("tools");
           <li>Produit qui rapporte 10k$ par mois</li>
           <li>Produit qui rapporte 100k$ par mois</li>
           <li>Licorne (évaluée à plus d'un milliard $)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="flex flex-col gap-4 border p-4 bg-slate-300 rounded shadow">
+      <div>
+        <h1 class="text-xl font-bold pb-4">Personnes</h1>
+        <ul class="grid md:grid-cols-3 grid-cols-1 gap-4">
+          {
+            allPersons
+              .filter((person) => person.data.Name)
+              .map((person) => (
+                <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
+                  <div>
+                    <div class="flex items-start justify-between">
+                      <div>
+                        <div class="font-semibold flex gap-1 items-center leading-3">
+                          {person.data.Name}
+                          <Icon
+                            name="ic:baseline-discord"
+                            class="opacity-50 ml-2"
+                          />
+                          <p class="text-sm opacity-50">
+                            {person.data.discord}
+                          </p>
+                        </div>
+                        <p class="opacity-70">{person.data.job}</p>
+                      </div>
+
+                      <div class="flex gap-2">
+                        {person.data.github && (
+                          <a
+                            href={`https://github.com/${person.data.github}`}
+                            target="_blank"
+                          >
+                            <div class="p-1 rounded hover:bg-slate-200">
+                              <Icon name="mdi:github" />
+                            </div>
+                          </a>
+                        )}
+                        {person.data.linkedin && (
+                          <a
+                            href={`https://www.linkedin.com/in/${person.data.linkedin}`}
+                            target="_blank"
+                          >
+                            <div class="p-1 rounded hover:bg-slate-200">
+                              <Icon name="mdi:linkedin" />
+                            </div>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex gap-2 flex-wrap">
+                    {person.data["Name (from Ideas)"]?.map((idea) => (
+                      <div class="border px-2 rounded-md shadow">{idea}</div>
+                    ))}
+                  </div>
+                </li>
+              ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold pb-4">Projets</h1>
+        <ul class="grid md:grid-cols-3 grid-cols-1 gap-4">
+          {
+            allProjects.map((project) => (
+              <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
+                <div>
+                  <div class="flex items-center justify-between">
+                    <h2 class="font-semibold">
+                      {project.data.Name} - Niveau {project.data.Level}
+                    </h2>
+                    <div class="flex gap-2">
+                      {project.data.instagram && (
+                        <a
+                          href={`https://www.instagram.com/${project.data.instagram}`}
+                          target="_blank"
+                        >
+                          <div class="p-1 rounded hover:bg-slate-200">
+                            <Icon name="mdi:instagram" />
+                          </div>
+                        </a>
+                      )}
+                      {project.data.Link && (
+                        <a href={project.data.Link} target="_blank">
+                          <div class="p-1 rounded hover:bg-slate-200">
+                            <Icon name="mdi:link" />
+                          </div>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  <p class="opacity-70">{project.data.Description}</p>
+                </div>
+
+                <div class="flex flex-wrap gap-2">
+                  {project.data["Name (from Stack)"]?.map((tool) => (
+                    <div class="border px-2 rounded-md shadow">{tool}</div>
+                  ))}
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h1 class="text-xl font-bold pb-4">Outils</h1>
+        <ul class="grid md:grid-cols-3 grid-cols-1 gap-4">
+          {
+            allTools.map((tool) => (
+              <li class="border p-4 rounded bg-slate-50 shadow-md">
+                <div class="flex items-start justify-between">
+                  <h2 class="font-semibold">{tool.data.Name}</h2>
+
+                  <div class="flex gap-2">
+                    {tool.data.link && (
+                      <a href={tool.data.link} target="_blank">
+                        <div class="p-1 rounded hover:bg-slate-200">
+                          <Icon name="mdi:link" />
+                        </div>
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <p class="opacity-70">{tool.data.Description}</p>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </div>
