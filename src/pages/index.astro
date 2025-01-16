@@ -72,7 +72,10 @@ const allTools = await getCollection("tools");
                             {person.data.discord}
                           </p>
                         </div>
-                        <p class="opacity-70">{person.data.job}</p>
+                        <p class="opacity-70">
+                          {person.data.job}{" "}
+                          <span class="text-sm">📍{person.data.Ville}</span>
+                        </p>
                       </div>
 
                       <div class="flex gap-2">
