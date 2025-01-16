@@ -57,6 +57,7 @@ const allTools = await getCollection("tools");
           {
             allPersons
               .filter((person) => person.data.Name)
+              .sort((a, b) => (a.data.Surname || "").localeCompare(b.data.Surname || ""))
               .map((person) => (
                 <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
                   <div>
@@ -78,7 +79,21 @@ const allTools = await getCollection("tools");
                         </p>
                       </div>
 
-                      <div class="flex gap-2">
+                      <div class="flex">
+                        {person.data.perso && (
+                          <a href={person.data.perso} target="_blank">
+                            <div class="p-1 rounded hover:bg-slate-200">
+                              <Icon name="mdi:link" />
+                            </div>
+                          </a>
+                        )}
+                        {person.data.freelance && (
+                          <a href={person.data.freelance} target="_blank">
+                            <div class="p-1 rounded hover:bg-slate-200">
+                              <Icon name="mdi:money" />
+                            </div>
+                          </a>
+                        )}
                         {person.data.github && (
                           <a
                             href={`https://github.com/${person.data.github}`}
@@ -117,44 +132,46 @@ const allTools = await getCollection("tools");
         <h1 class="text-xl font-bold pb-4">Projets</h1>
         <ul class="grid md:grid-cols-3 grid-cols-1 gap-4">
           {
-            allProjects.map((project) => (
-              <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
-                <div>
-                  <div class="flex items-center justify-between">
-                    <h2 class="font-semibold">
-                      {project.data.Name} - Niveau {project.data.Level}
-                    </h2>
-                    <div class="flex gap-2">
-                      {project.data.instagram && (
-                        <a
-                          href={`https://www.instagram.com/${project.data.instagram}`}
-                          target="_blank"
-                        >
-                          <div class="p-1 rounded hover:bg-slate-200">
-                            <Icon name="mdi:instagram" />
-                          </div>
-                        </a>
-                      )}
-                      {project.data.Link && (
-                        <a href={project.data.Link} target="_blank">
-                          <div class="p-1 rounded hover:bg-slate-200">
-                            <Icon name="mdi:link" />
-                          </div>
-                        </a>
-                      )}
+            allProjects
+              .sort((a, b) => (a.data.Level || 0) - (b.data.Level || 0))
+              .map((project) => (
+                <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <h2 class="font-semibold">
+                        {project.data.Name} - Niveau {project.data.Level}
+                      </h2>
+                      <div class="flex gap-2">
+                        {project.data.instagram && (
+                          <a
+                            href={`https://www.instagram.com/${project.data.instagram}`}
+                            target="_blank"
+                          >
+                            <div class="p-1 rounded hover:bg-slate-200">
+                              <Icon name="mdi:instagram" />
+                            </div>
+                          </a>
+                        )}
+                        {project.data.Link && (
+                          <a href={project.data.Link} target="_blank">
+                            <div class="p-1 rounded hover:bg-slate-200">
+                              <Icon name="mdi:link" />
+                            </div>
+                          </a>
+                        )}
+                      </div>
                     </div>
+
+                    <p class="opacity-70">{project.data.Description}</p>
                   </div>
 
-                  <p class="opacity-70">{project.data.Description}</p>
-                </div>
-
-                <div class="flex flex-wrap gap-2">
-                  {project.data["Name (from Stack)"]?.map((tool) => (
-                    <div class="border px-2 rounded-md shadow">{tool}</div>
-                  ))}
-                </div>
-              </li>
-            ))
+                  <div class="flex flex-wrap gap-2">
+                    {project.data["Name (from Stack)"]?.map((tool) => (
+                      <div class="border px-2 rounded-md shadow">{tool}</div>
+                    ))}
+                  </div>
+                </li>
+              ))
           }
         </ul>
       </div>
@@ -163,21 +180,29 @@ const allTools = await getCollection("tools");
         <ul class="grid md:grid-cols-3 grid-cols-1 gap-4">
           {
             allTools.map((tool) => (
-              <li class="border p-4 rounded bg-slate-50 shadow-md">
-                <div class="flex items-start justify-between">
-                  <h2 class="font-semibold">{tool.data.Name}</h2>
+              <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
+                <div>
+                  <div class="flex items-start justify-between">
+                    <h2 class="font-semibold">{tool.data.Name}</h2>
 
-                  <div class="flex gap-2">
-                    {tool.data.link && (
-                      <a href={tool.data.link} target="_blank">
-                        <div class="p-1 rounded hover:bg-slate-200">
-                          <Icon name="mdi:link" />
-                        </div>
-                      </a>
-                    )}
+                    <div class="flex gap-2">
+                      {tool.data.link && (
+                        <a href={tool.data.link} target="_blank">
+                          <div class="p-1 rounded hover:bg-slate-200">
+                            <Icon name="mdi:link" />
+                          </div>
+                        </a>
+                      )}
+                    </div>
                   </div>
+                  <p class="opacity-70">{tool.data.Description}</p>
                 </div>
-                <p class="opacity-70">{tool.data.Description}</p>
+
+                <div class="flex gap-2 flex-wrap">
+                  {tool.data["Name (from Category)"]?.map((category) => (
+                    <div class="border px-2 rounded-md shadow">{category}</div>
+                  ))}
+                </div>
               </li>
             ))
           }
