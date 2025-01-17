@@ -1,11 +1,14 @@
 ---
 import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
+import ToolFilter from "../components/product-filter";
 import Layout from "../layouts/Layout.astro";
 
 const allProjects = await getCollection("projects");
 const allPersons = await getCollection("persons");
-const allTools = await getCollection("tools");
+const allTools = (await getCollection("tools")).sort((a, b) =>
+  (a.data.Name || "").localeCompare(b.data.Name || "")
+);
 ---
 
 <Layout>
@@ -57,7 +60,9 @@ const allTools = await getCollection("tools");
           {
             allPersons
               .filter((person) => person.data.Name)
-              .sort((a, b) => (a.data.Surname || "").localeCompare(b.data.Surname || ""))
+              .sort((a, b) =>
+                (a.data.Surname || "").localeCompare(b.data.Surname || "")
+              )
               .map((person) => (
                 <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
                   <div>
@@ -176,37 +181,7 @@ const allTools = await getCollection("tools");
         </ul>
       </div>
       <div>
-        <h1 class="text-xl font-bold pb-4">Outils</h1>
-        <ul class="grid md:grid-cols-3 grid-cols-1 gap-4">
-          {
-            allTools.map((tool) => (
-              <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
-                <div>
-                  <div class="flex items-start justify-between">
-                    <h2 class="font-semibold">{tool.data.Name}</h2>
-
-                    <div class="flex gap-2">
-                      {tool.data.link && (
-                        <a href={tool.data.link} target="_blank">
-                          <div class="p-1 rounded hover:bg-slate-200">
-                            <Icon name="mdi:link" />
-                          </div>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                  <p class="opacity-70">{tool.data.Description}</p>
-                </div>
-
-                <div class="flex gap-2 flex-wrap">
-                  {tool.data["Name (from Category)"]?.map((category) => (
-                    <div class="border px-2 rounded-md shadow">{category}</div>
-                  ))}
-                </div>
-              </li>
-            ))
-          }
-        </ul>
+        <ToolFilter client:load tools={allTools} />
       </div>
     </div>
   </div>
