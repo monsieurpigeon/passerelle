@@ -1,4 +1,5 @@
 // src/components/ProductFilter.tsx
+import { Link2 } from "lucide-react";
 import { useState } from "react";
 
 interface Tool {
@@ -79,7 +80,7 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
                   {tool.data.link && (
                     <a href={tool.data.link} target="_blank">
                       <div className="p-1 rounded hover:bg-slate-200">
-                        {/* <Icon name="mdi:link" /> */}
+                        <Link2 size={20} />
                       </div>
                     </a>
                   )}
