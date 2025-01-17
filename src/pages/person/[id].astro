@@ -45,13 +45,7 @@ const tools = await Promise.all(
       <div class="flex flex-col items-center justify-center mb-8">
         <div class="text-3xl font-bold">{person.data.Name}</div>
         <div class="opacity-70">{person.data.job} 📍{person.data.Ville}</div>
-        <div class="flex items-center gap-2">
-          <div class="flex items-center gap-2">
-            <Icon name="ic:baseline-discord" class="" />
-            <p class="">
-              {person.data.discord}
-            </p>
-          </div>
+        <div class="flex items-center">
           {
             person.data.perso && (
               <a href={person.data.perso} target="_blank">
@@ -94,6 +88,12 @@ const tools = await Promise.all(
               </a>
             )
           }
+          <div class="flex items-center gap-2 p-1 ml-4 opacity-70">
+            <Icon name="ic:baseline-discord" />
+            <p class="leading-3 pb-1">
+              {person.data.discord}
+            </p>
+          </div>
         </div>
       </div>
       <div class="max-w-screen-md m-auto">
@@ -110,9 +110,13 @@ const tools = await Promise.all(
                     <div class="flex flex-col gap-2 border rounded-md shadow p-4">
                       <div class="flex justify-between items-center">
                         <div class="text-lg font-bold">
-                          {project.data.Name} - {project.data.Level}⭐️
+                          <span class="mr-8">
+                            {project.data.Level}
+                            ⭐️
+                          </span>
+                          {project.data.Name}{" "}
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex">
                           {project.data.X && (
                             <a
                               href={`https://x.com/${project.data.X}`}
@@ -169,7 +173,21 @@ const tools = await Promise.all(
                   return (
                     <div class="flex flex-col gap-2 border rounded-md shadow p-4">
                       <div class="flex justify-between items-center">
-                        <div class="text-lg font-bold">{tool.data.Name}</div>
+                        <div class="flex gap-4">
+                          <div class="text-lg font-bold">{tool.data.Name}</div>
+                          <div class="flex gap-2">
+                            <div class="flex gap-2 flex-wrap items-center">
+                              {tool.data["Name (from Category)"]
+                                ?.sort((a, b) => a.localeCompare(b))
+                                .map((category) => (
+                                  <div class="text-xs px-1 rounded-full shadow break-keep">
+                                    {category}
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="flex gap-2">
                           {tool.data.link && (
                             <a href={tool.data.link} target="_blank">

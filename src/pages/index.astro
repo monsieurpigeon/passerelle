@@ -36,7 +36,8 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
           <Icon name="ic:baseline-discord" />
         </a>
       </div>
-    </div><div class="p-4 bg-lime-50 rounded shadow">
+    </div>
+    <div class="p-4 bg-lime-50 rounded shadow">
       <h1 class="text-xl font-bold">Les niveaux d'un projet</h1>
       <div class="flex items-center justify-center">
         <ul class="list-decimal list-inside text-lg p-4 flex flex-col gap-2">
@@ -56,7 +57,7 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
     <div class="flex flex-col gap-4 border p-4 bg-slate-300 rounded shadow">
       <div>
         <h1 class="text-xl font-bold pb-4">Personnes</h1>
-        <ul class="grid md:grid-cols-3 grid-cols-1 gap-4">
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
           {
             allPersons
               .filter((person) => person.data.Name)
@@ -144,18 +145,23 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
       </div>
       <div>
         <h1 class="text-xl font-bold pb-4">Projets</h1>
-        <ul class="grid md:grid-cols-3 grid-cols-1 gap-4">
+        <ul class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
           {
             allProjects
-              .sort((a, b) => (a.data.Level || 0) - (b.data.Level || 0))
+              .sort((a, b) => (b.data.Level || 0) - (a.data.Level || 0))
               .map((project) => (
                 <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
                   <div>
-                    <div class="flex items-center justify-between">
-                      <h2 class="font-semibold">
-                        {project.data.Name} - {project.data.Level}⭐️
-                      </h2>
-                      <div class="flex gap-2">
+                    <div class="flex items-center justify-between relative">
+                      <div class="text-lg font-bold">
+                        <span class="px-2 rounded-full absolute -top-7 -left-4 bg-slate-100 shadow-md">
+                          {project.data.Level}
+                          ⭐️
+                        </span>
+                        {project.data.Name}
+                      </div>
+
+                      <div class="flex">
                         {project.data.instagram && (
                           <a
                             href={`https://www.instagram.com/${project.data.instagram}`}
@@ -175,7 +181,17 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
                         )}
                       </div>
                     </div>
-
+                    <a
+                      href={`/person/${project.data.Assignee}`}
+                      class="text-sm group hover:opacity-70"
+                    >
+                      <div>
+                        Par{" "}
+                        <span class="group-hover:underline">
+                          {project.data["Name (from Assignee)"]}
+                        </span>
+                      </div>
+                    </a>
                     <p class="opacity-70">{project.data.Description}</p>
                   </div>
 

@@ -43,12 +43,12 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
 
   return (
     <div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 mb-2">
         <h1 className="text-xl font-bold">Outils</h1>
-        <div className="filters">
+        <div className="flex flex-wrap gap-1">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`filter-btn ${
+            className={`rounded-full filter-btn ${
               selectedCategory === null ? "active" : ""
             }`}
           >
@@ -59,7 +59,7 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
             .map((category) => (
               <button
                 onClick={() => setSelectedCategory(category)}
-                className={`filter-btn ${
+                className={`rounded-full filter-btn ${
                   selectedCategory === category ? "active" : ""
                 }`}
               >
@@ -69,12 +69,23 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
         </div>
       </div>
 
-      <ul className="grid md:grid-cols-3 grid-cols-1 gap-4">
+      <ul className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
         {filteredTools.map((tool) => (
           <li className="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
             <div>
               <div className="flex items-start justify-between">
-                <h2 className="font-semibold">{tool.data.Name}</h2>
+                <div className="flex gap-4 items-center flex-wrap">
+                  <div className="font-semibold">{tool.data.Name}</div>
+                  <div className="flex gap-2 flex-wrap">
+                    {tool.data["Name (from Category)"]
+                      ?.sort((a, b) => a.localeCompare(b))
+                      .map((category) => (
+                        <div className="text-xs px-1 rounded-full shadow break-keep">
+                          {category}
+                        </div>
+                      ))}
+                  </div>
+                </div>
 
                 <div className="flex gap-2">
                   {tool.data.link && (
@@ -86,13 +97,8 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
                   )}
                 </div>
               </div>
-              <p className="opacity-70">{tool.data.Description}</p>
-            </div>
 
-            <div className="flex gap-2 flex-wrap">
-              {tool.data["Name (from Category)"]?.map((category) => (
-                <div className="border px-2 rounded-md shadow">{category}</div>
-              ))}
+              <p className="opacity-70">{tool.data.Description}</p>
             </div>
           </li>
         ))}
@@ -102,10 +108,8 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
           margin: 20px 0;
         }
         .filter-btn {
-          margin-right: 10px;
-          padding: 5px 10px;
+          padding: 0px 8px;
           border: 1px solid #ddd;
-          border-radius: 4px;
           background: white;
           cursor: pointer;
         }
