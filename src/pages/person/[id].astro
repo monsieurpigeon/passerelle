@@ -19,13 +19,13 @@ export const getStaticPaths = (async () => {
 const { person } = Astro.props;
 
 const projects = await Promise.all(
-  (person.data.projects as string[]).map((projectRef) =>
+  ((person.data.projects as string[]) || []).map((projectRef) =>
     getEntry({ collection: "projects", id: projectRef })
   )
 );
 
 const tools = await Promise.all(
-  (person.data.Specialist as string[]).map((toolRef) =>
+  ((person.data.Specialist as string[]) || []).map((toolRef) =>
     getEntry({ collection: "tools", id: toolRef })
   )
 );
