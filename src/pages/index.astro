@@ -64,69 +64,78 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
                 (a.data.Surname || "").localeCompare(b.data.Surname || "")
               )
               .map((person) => (
-                <li class="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
-                  <div>
-                    <div class="flex items-start justify-between">
-                      <div>
-                        <div class="font-semibold flex gap-1 items-center leading-3">
-                          {person.data.Name}
-                          <Icon
-                            name="ic:baseline-discord"
-                            class="opacity-50 ml-2"
-                          />
-                          <p class="text-sm opacity-50">
-                            {person.data.discord}
+                <li class="">
+                  <div class="h-full border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
+                    <div>
+                      <div class="flex items-start justify-between">
+                        <div>
+                          <div class="font-semibold flex gap-1 items-center leading-3">
+                            <a
+                              href={`/person/${person.id}`}
+                              class="hover:underline"
+                            >
+                              {person.data.Name}
+                            </a>
+                            <Icon
+                              name="ic:baseline-discord"
+                              class="opacity-50 ml-2"
+                            />
+                            <p class="text-sm opacity-50">
+                              {person.data.discord}
+                            </p>
+                          </div>
+                          <p class="opacity-70">
+                            {person.data.job}{" "}
+                            <span class="text-sm">📍{person.data.Ville}</span>
                           </p>
                         </div>
-                        <p class="opacity-70">
-                          {person.data.job}{" "}
-                          <span class="text-sm">📍{person.data.Ville}</span>
-                        </p>
-                      </div>
 
-                      <div class="flex">
-                        {person.data.perso && (
-                          <a href={person.data.perso} target="_blank">
-                            <div class="p-1 rounded hover:bg-slate-200">
-                              <Icon name="mdi:link" />
-                            </div>
-                          </a>
-                        )}
-                        {person.data.freelance && (
-                          <a href={person.data.freelance} target="_blank">
-                            <div class="p-1 rounded hover:bg-slate-200">
-                              <Icon name="mdi:money" />
-                            </div>
-                          </a>
-                        )}
-                        {person.data.github && (
-                          <a
-                            href={`https://github.com/${person.data.github}`}
-                            target="_blank"
-                          >
-                            <div class="p-1 rounded hover:bg-slate-200">
-                              <Icon name="mdi:github" />
-                            </div>
-                          </a>
-                        )}
-                        {person.data.linkedin && (
-                          <a
-                            href={`https://www.linkedin.com/in/${person.data.linkedin}`}
-                            target="_blank"
-                          >
-                            <div class="p-1 rounded hover:bg-slate-200">
-                              <Icon name="mdi:linkedin" />
-                            </div>
-                          </a>
-                        )}
+                        <div class="flex">
+                          {person.data.perso && (
+                            <a href={person.data.perso} target="_blank">
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:link" />
+                              </div>
+                            </a>
+                          )}
+                          {person.data.freelance && (
+                            <a href={person.data.freelance} target="_blank">
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:money" />
+                              </div>
+                            </a>
+                          )}
+                          {person.data.github && (
+                            <a
+                              href={`https://github.com/${person.data.github}`}
+                              target="_blank"
+                            >
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:github" />
+                              </div>
+                            </a>
+                          )}
+                          {person.data.linkedin && (
+                            <a
+                              href={`https://www.linkedin.com/in/${person.data.linkedin}`}
+                              target="_blank"
+                            >
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:linkedin" />
+                              </div>
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div class="flex gap-2 flex-wrap">
-                    {person.data["Name (from Projects)"]?.map((project) => (
-                      <div class="border px-2 rounded-md shadow">{project}</div>
-                    ))}
+                    <div class="flex gap-2 flex-wrap">
+                      {person.data["Name (from Projects)"]?.map((project) => (
+                        <div class="border px-2 rounded-md shadow">
+                          {project}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </li>
               ))
