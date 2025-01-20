@@ -5,27 +5,27 @@ import { getCollection, getEntry } from "astro:content";
 
 // Génère toutes les routes possibles
 export const getStaticPaths = (async () => {
-  const allPersons = await getCollection("persons");
+  const allProjets = await getCollection("projects");
 
-  return allPersons.map((person) => {
+  return allProjets.map((project) => {
     return {
-      params: { id: person.id.toString() },
-      props: { person },
+      params: { id: project.id.toString() },
+      props: { project },
     };
   });
 }) satisfies GetStaticPaths;
 
 // Récupère le produit depuis les props
-const { person } = Astro.props;
+const { project } = Astro.props;
 
-const projects = await Promise.all(
-  ((person.data.projects as string[]) || []).map((projectRef) =>
-    getEntry({ collection: "projects", id: projectRef })
+const persons = await Promise.all(
+  ((project.data.Assignees as string[]) || []).map((personRef) =>
+    getEntry({ collection: "persons", id: personRef })
   )
 );
 
 const tools = await Promise.all(
-  ((person.data.Specialist as string[]) || []).map((toolRef) =>
+  ((project.data.Stack as string[]) || []).map((toolRef) =>
     getEntry({ collection: "tools", id: toolRef })
   )
 );
@@ -34,7 +34,7 @@ const tools = await Promise.all(
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>{person.data.Name}</title>
+    <title>{project.data.Name}</title>
   </head>
   <body>
     <nav class="p-4">
@@ -42,96 +42,119 @@ const tools = await Promise.all(
     </nav>
 
     <main class="">
-      <div class="flex flex-col items-center justify-center mb-8">
-        <div class="text-3xl font-bold">{person.data.Name}</div>
-        <div class="opacity-70">{person.data.job} 📍{person.data.Ville}</div>
+      <div class="flex flex-col items-center justify-center mb-8 gap-4">
+        <div class="text-3xl font-bold">
+          <span class="mr-8">
+            {project.data.Level}
+            ⭐️
+          </span>
+          {project.data.Name}
+        </div>
+        <div class="max-w-96 border p-4 rounded">
+          {project.data.Description}
+        </div>
         <div class="flex items-center">
           {
-            person.data.perso && (
-              <a href={person.data.perso} target="_blank">
+            project.data.X && (
+              <a href={`https://x.com/${project.data.X}`} target="_blank">
+                <div class="p-1 rounded hover:bg-slate-200">
+                  <Icon name="fa6-brands:x-twitter" />
+                </div>
+              </a>
+            )
+          }
+          {
+            project.data.instagram && (
+              <a
+                href={`https://www.instagram.com/${project.data.instagram}`}
+                target="_blank"
+              >
+                <div class="p-1 rounded hover:bg-slate-200">
+                  <Icon name="mdi:instagram" />
+                </div>
+              </a>
+            )
+          }
+          {
+            project.data.Link && (
+              <a href={project.data.Link} target="_blank">
                 <div class="p-1 rounded hover:bg-slate-200">
                   <Icon name="mdi:link" />
                 </div>
               </a>
             )
           }
-          {
-            person.data.freelance && (
-              <a href={person.data.freelance} target="_blank">
-                <div class="p-1 rounded hover:bg-slate-200">
-                  <Icon name="mdi:money" />
-                </div>
-              </a>
-            )
-          }
-          {
-            person.data.github && (
-              <a
-                href={`https://github.com/${person.data.github}`}
-                target="_blank"
-              >
-                <div class="p-1 rounded hover:bg-slate-200">
-                  <Icon name="mdi:github" />
-                </div>
-              </a>
-            )
-          }
-          {
-            person.data.linkedin && (
-              <a
-                href={`https://www.linkedin.com/in/${person.data.linkedin}`}
-                target="_blank"
-              >
-                <div class="p-1 rounded hover:bg-slate-200">
-                  <Icon name="mdi:linkedin" />
-                </div>
-              </a>
-            )
-          }
-          <div class="flex items-center gap-2 p-1 ml-4 opacity-70">
-            <Icon name="ic:baseline-discord" />
-            <p class="leading-3 pb-1">
-              {person.data.discord}
-            </p>
-          </div>
         </div>
       </div>
       <div class="max-w-screen-md m-auto">
         <div class="p-4">
-          <div class="font-semibold">Projets</div>
+          <div class="font-semibold">Équipe</div>
           <div class="flex flex-col gap-2">
             {
-              projects.length === 0 && (
+              persons.length === 0 && (
                 <div class="text-center opacity-60">
-                  Aucun projet (pour l'instant ☝️)
+                  Aucune équipe (pour l'instant ☝️)
                 </div>
               )
             }
             {
-              projects
+              persons
                 .sort((a, b) => {
-                  return (b.data.Level || 0) - (a.data.Level || 0);
+                  return (b.data.Name || "").localeCompare(a.data.Name || "");
                 })
-                .map((project) => {
+                .map((person) => {
                   return (
                     <div class="flex flex-col gap-2 border rounded-md shadow p-4">
                       <div class="flex justify-between items-center">
-                        <div class="text-lg font-bold">
-                          <span class="mr-8">
-                            {project.data.Level}
-                            ⭐️
-                          </span>
+                        <div class="flex gap-2 items-center">
                           <a
-                            href={`/project/${project.id}`}
-                            class="hover:underline"
+                            href={`/person/${person.id}`}
+                            class="hover:underline text-lg font-bold"
                           >
-                            {project.data.Name}
+                            {person.data.Name}
                           </a>
+                          <div class="opacity-70">
+                            {person.data.job} 📍{person.data.Ville}
+                          </div>
                         </div>
-                        <div class="flex">
-                          {project.data.X && (
+                        <div class="flex items-center">
+                          {person.data.perso && (
+                            <a href={person.data.perso} target="_blank">
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:link" />
+                              </div>
+                            </a>
+                          )}
+                          {person.data.freelance && (
+                            <a href={person.data.freelance} target="_blank">
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:money" />
+                              </div>
+                            </a>
+                          )}
+                          {person.data.github && (
                             <a
-                              href={`https://x.com/${project.data.X}`}
+                              href={`https://github.com/${person.data.github}`}
+                              target="_blank"
+                            >
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:github" />
+                              </div>
+                            </a>
+                          )}
+                          {person.data.linkedin && (
+                            <a
+                              href={`https://www.linkedin.com/in/${person.data.linkedin}`}
+                              target="_blank"
+                            >
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:linkedin" />
+                              </div>
+                            </a>
+                          )}
+                          {person.data.x && (
+                            <a
+                              href={`https://x.com/${person.data.x}`}
                               target="_blank"
                             >
                               <div class="p-1 rounded hover:bg-slate-200">
@@ -139,33 +162,11 @@ const tools = await Promise.all(
                               </div>
                             </a>
                           )}
-                          {project.data.instagram && (
-                            <a
-                              href={`https://www.instagram.com/${project.data.instagram}`}
-                              target="_blank"
-                            >
-                              <div class="p-1 rounded hover:bg-slate-200">
-                                <Icon name="mdi:instagram" />
-                              </div>
-                            </a>
-                          )}
-                          {project.data.Link && (
-                            <a href={project.data.Link} target="_blank">
-                              <div class="p-1 rounded hover:bg-slate-200">
-                                <Icon name="mdi:link" />
-                              </div>
-                            </a>
-                          )}
                         </div>
                       </div>
-
-                      <div>{project.data.Description}</div>
-                      <div class="flex flex-wrap gap-2">
-                        {project.data["Name (from Stack)"]
-                          ?.sort((a, b) => a.localeCompare(b))
-                          .map((tool) => (
-                            <div class="border shadow px-2 rounded">{tool}</div>
-                          ))}
+                      <div class="flex items-center gap-2 p-1 opacity-70">
+                        <Icon name="ic:baseline-discord" />
+                        <p class="leading-3 pb-1">{person.data.discord}</p>
                       </div>
                     </div>
                   );
@@ -174,12 +175,12 @@ const tools = await Promise.all(
           </div>
         </div>
         <div class="p-4">
-          <div class="font-semibold">Expertise</div>
+          <div class="font-semibold">Stack</div>
           <div class="flex flex-col gap-2">
             {
               tools.length === 0 && (
                 <div class="text-center opacity-60">
-                  Aucune expertise (pour l'instant ☝️)
+                  Aucune stack (pour l'instant ☝️)
                 </div>
               )
             }

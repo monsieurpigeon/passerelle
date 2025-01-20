@@ -158,7 +158,12 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
                           {project.data.Level}
                           ⭐️
                         </span>
-                        {project.data.Name}
+                        <a
+                          href={`/project/${project.id}`}
+                          class="hover:underline"
+                        >
+                          {project.data.Name}
+                        </a>
                       </div>
 
                       <div class="flex">
@@ -181,17 +186,22 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
                         )}
                       </div>
                     </div>
-                    <a
-                      href={`/person/${project.data.Assignee}`}
-                      class="text-sm group hover:opacity-70"
-                    >
-                      <div>
-                        Par{" "}
-                        <span class="group-hover:underline">
-                          {project.data["Name (from Assignee)"]}
-                        </span>
-                      </div>
-                    </a>
+
+                    <div class="flex flex-wrap gap-4">
+                      {project.data["Name (from Assignee)"]?.map(
+                        (person, index) => {
+                          return (
+                            <a
+                              href={`/person/${(project.data.Assignees as string[])[index]}`}
+                              class="text-sm hover:opacity-70"
+                            >
+                              {person}
+                            </a>
+                          );
+                        }
+                      )}
+                    </div>
+
                     <p class="opacity-70">{project.data.Description}</p>
                   </div>
 
