@@ -5,28 +5,28 @@ import { getCollection, getEntry } from "astro:content";
 
 // Génère toutes les routes possibles
 export const getStaticPaths = (async () => {
-  const allProjets = await getCollection("projects");
+  const allTools = await getCollection("tools");
 
-  return allProjets.map((project) => {
+  return allTools.map((tool) => {
     return {
-      params: { id: project.id.toString() },
-      props: { project },
+      params: { id: tool.id.toString() },
+      props: { tool },
     };
   });
 }) satisfies GetStaticPaths;
 
 // Récupère le produit depuis les props
-const { project } = Astro.props;
+const { tool } = Astro.props;
 
 const persons = await Promise.all(
-  ((project.data.Assignees as string[]) || []).map((personRef) =>
+  ((tool.data.Persons as string[]) || []).map((personRef) =>
     getEntry({ collection: "persons", id: personRef })
   )
 );
 
-const tools = await Promise.all(
-  ((project.data.Stack as string[]) || []).map((toolRef) =>
-    getEntry({ collection: "tools", id: toolRef })
+const projects = await Promise.all(
+  ((tool.data.Projects as string[]) || []).map((projectRef) =>
+    getEntry({ collection: "projects", id: projectRef })
   )
 );
 ---
@@ -34,7 +34,7 @@ const tools = await Promise.all(
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
-    <title>{project.data.Name}</title>
+    <title>{tool.data.Name}</title>
   </head>
   <body>
     <nav class="p-4">
@@ -44,40 +44,26 @@ const tools = await Promise.all(
     <main class="">
       <div class="flex flex-col items-center justify-center mb-8 gap-4">
         <div class="text-3xl font-bold">
-          <span class="mr-8">
-            {project.data.Level}
-            ⭐️
-          </span>
-          {project.data.Name}
+          {tool.data.Name}
+        </div>
+        <div class="flex gap-2 flex-wrap items-center">
+          {
+            tool.data["Name (from Category)"]
+              ?.sort((a, b) => a.localeCompare(b))
+              .map((category) => (
+                <div class="px-2 rounded-full shadow break-keep">
+                  {category}
+                </div>
+              ))
+          }
         </div>
         <div class="max-w-96 border p-4 rounded">
-          {project.data.Description}
+          {tool.data.Description}
         </div>
         <div class="flex items-center">
           {
-            project.data.X && (
-              <a href={`https://x.com/${project.data.X}`} target="_blank">
-                <div class="p-1 rounded hover:bg-slate-200">
-                  <Icon name="fa6-brands:x-twitter" />
-                </div>
-              </a>
-            )
-          }
-          {
-            project.data.instagram && (
-              <a
-                href={`https://www.instagram.com/${project.data.instagram}`}
-                target="_blank"
-              >
-                <div class="p-1 rounded hover:bg-slate-200">
-                  <Icon name="mdi:instagram" />
-                </div>
-              </a>
-            )
-          }
-          {
-            project.data.Link && (
-              <a href={project.data.Link} target="_blank">
+            tool.data.link && (
+              <a href={tool.data.link} target="_blank">
                 <div class="p-1 rounded hover:bg-slate-200">
                   <Icon name="mdi:link" />
                 </div>
@@ -88,19 +74,21 @@ const tools = await Promise.all(
       </div>
       <div class="max-w-screen-md m-auto">
         <div class="p-4">
-          <div class="font-semibold">Équipe</div>
+          <div class="font-semibold">Spécialistes</div>
           <div class="flex flex-col gap-2">
             {
               persons.length === 0 && (
                 <div class="text-center opacity-60">
-                  Aucune équipe (pour l'instant ☝️)
+                  Aucun spécialiste (pour l'instant ☝️)
                 </div>
               )
             }
             {
               persons
                 .sort((a, b) => {
-                  return (b.data.Name || "").localeCompare(a.data.Name || "");
+                  return (a.data.Surname || "").localeCompare(
+                    b.data.Surname || ""
+                  );
                 })
                 .map((person) => {
                   return (
@@ -175,49 +163,69 @@ const tools = await Promise.all(
           </div>
         </div>
         <div class="p-4">
-          <div class="font-semibold">Stack</div>
+          <div class="font-semibold">Projets</div>
           <div class="flex flex-col gap-2">
             {
-              tools.length === 0 && (
+              projects.length === 0 && (
                 <div class="text-center opacity-60">
-                  Aucune stack (pour l'instant ☝️)
+                  Dans aucun projet (pour l'instant ☝️)
                 </div>
               )
             }
             {
-              tools
+              projects
                 .sort((a, b) => {
-                  return (a.data.Name || "").localeCompare(b.data.Name || "");
+                  return (b.data.Level || 0) - (a.data.Level || 0);
                 })
-                .map((tool) => {
+                .map((project) => {
+                  const ids = project.data.Stack as string[];
+                  const stack = project.data["Name (from Stack)"]
+                    ?.map((name, index) => {
+                      return {
+                        name,
+                        id: ids[index],
+                      };
+                    })
+                    .sort((a, b) => a.name.localeCompare(b.name));
+
                   return (
                     <div class="flex flex-col gap-2 border rounded-md shadow p-4">
                       <div class="flex justify-between items-center">
-                        <div class="flex gap-4">
-                          <div class="text-lg font-bold">
-                            <a
-                              href={`/tool/${tool.id}`}
-                              class="hover:underline"
-                            >
-                              {tool.data.Name}
-                            </a>
-                          </div>
-                          <div class="flex gap-2">
-                            <div class="flex gap-2 flex-wrap items-center">
-                              {tool.data["Name (from Category)"]
-                                ?.sort((a, b) => a.localeCompare(b))
-                                .map((category) => (
-                                  <div class="text-xs px-1 rounded-full shadow break-keep">
-                                    {category}
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
+                        <div class="text-lg font-bold">
+                          <span class="mr-8">
+                            {project.data.Level}
+                            ⭐️
+                          </span>
+                          <a
+                            href={`/project/${project.id}`}
+                            class="hover:underline"
+                          >
+                            {project.data.Name}
+                          </a>
                         </div>
-
-                        <div class="flex gap-2">
-                          {tool.data.link && (
-                            <a href={tool.data.link} target="_blank">
+                        <div class="flex">
+                          {project.data.X && (
+                            <a
+                              href={`https://x.com/${project.data.X}`}
+                              target="_blank"
+                            >
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="fa6-brands:x-twitter" />
+                              </div>
+                            </a>
+                          )}
+                          {project.data.instagram && (
+                            <a
+                              href={`https://www.instagram.com/${project.data.instagram}`}
+                              target="_blank"
+                            >
+                              <div class="p-1 rounded hover:bg-slate-200">
+                                <Icon name="mdi:instagram" />
+                              </div>
+                            </a>
+                          )}
+                          {project.data.Link && (
+                            <a href={project.data.Link} target="_blank">
                               <div class="p-1 rounded hover:bg-slate-200">
                                 <Icon name="mdi:link" />
                               </div>
@@ -225,7 +233,17 @@ const tools = await Promise.all(
                           )}
                         </div>
                       </div>
-                      <div>{tool.data.Description}</div>
+
+                      <div>{project.data.Description}</div>
+                      <div class="flex flex-wrap gap-2">
+                        {stack?.map((tool) => (
+                          <a href={`/tool/${tool.id}`} class="hover:underline">
+                            <div class="border shadow px-2 rounded">
+                              {tool.name}
+                            </div>
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   );
                 })

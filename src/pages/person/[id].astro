@@ -113,6 +113,16 @@ const tools = await Promise.all(
                   return (b.data.Level || 0) - (a.data.Level || 0);
                 })
                 .map((project) => {
+                  let ids = project.data.Stack as string[];
+                  let stack = project.data["Name (from Stack)"]
+                    ?.map((name, index) => {
+                      return {
+                        name,
+                        id: ids[index],
+                      };
+                    })
+                    .sort((a, b) => a.name.localeCompare(b.name));
+
                   return (
                     <div class="flex flex-col gap-2 border rounded-md shadow p-4">
                       <div class="flex justify-between items-center">
@@ -161,11 +171,13 @@ const tools = await Promise.all(
 
                       <div>{project.data.Description}</div>
                       <div class="flex flex-wrap gap-2">
-                        {project.data["Name (from Stack)"]
-                          ?.sort((a, b) => a.localeCompare(b))
-                          .map((tool) => (
-                            <div class="border shadow px-2 rounded">{tool}</div>
-                          ))}
+                        {stack?.map((tool) => (
+                          <a href={`/tool/${tool.id}`} class="hover:underline">
+                            <div class="border shadow px-2 rounded">
+                              {tool.name}
+                            </div>
+                          </a>
+                        ))}
                       </div>
                     </div>
                   );
@@ -193,7 +205,14 @@ const tools = await Promise.all(
                     <div class="flex flex-col gap-2 border rounded-md shadow p-4">
                       <div class="flex justify-between items-center">
                         <div class="flex gap-4">
-                          <div class="text-lg font-bold">{tool.data.Name}</div>
+                          <div class="text-lg font-bold">
+                            <a
+                              href={`/tool/${tool.id}`}
+                              class="hover:underline"
+                            >
+                              {tool.data.Name}
+                            </a>
+                          </div>
                           <div class="flex gap-2">
                             <div class="flex gap-2 flex-wrap items-center">
                               {tool.data["Name (from Category)"]

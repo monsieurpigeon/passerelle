@@ -44,7 +44,7 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
   return (
     <div>
       <div className="flex items-center gap-2 mb-2">
-        <h1 className="text-xl font-bold">Outils</h1>
+        <h1 className="text-xl font-bold">{filteredTools.length} Outils</h1>
         <div className="flex flex-wrap gap-1">
           <button
             onClick={() => setSelectedCategory(null)}
@@ -75,7 +75,11 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
             <div>
               <div className="flex items-start justify-between">
                 <div className="flex gap-4 items-center flex-wrap">
-                  <div className="font-semibold">{tool.data.Name}</div>
+                  <div className="font-semibold">
+                    <a href={`/tool/${tool.id}`} className="hover:underline">
+                      {tool.data.Name}
+                    </a>
+                  </div>
                   <div className="flex gap-2 flex-wrap">
                     {tool.data["Name (from Category)"]
                       ?.sort((a, b) => a.localeCompare(b))
