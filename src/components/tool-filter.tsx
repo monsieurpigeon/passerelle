@@ -58,6 +58,7 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
             .sort((a, b) => a.localeCompare(b))
             .map((category) => (
               <button
+                key={category}
                 onClick={() => setSelectedCategory(category)}
                 className={`rounded-full filter-btn ${
                   selectedCategory === category ? "active" : ""
@@ -71,7 +72,10 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
 
       <ul className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
         {filteredTools.map((tool) => (
-          <li className="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md">
+          <li
+            key={tool.id}
+            className="border p-4 rounded flex flex-col gap-4 justify-between bg-slate-50 shadow-md"
+          >
             <div>
               <div className="flex items-start justify-between">
                 <div className="flex gap-4 items-center flex-wrap">
@@ -84,7 +88,10 @@ export default function ToolFilter({ tools }: ToolFilterProps) {
                     {tool.data["Name (from Category)"]
                       ?.sort((a, b) => a.localeCompare(b))
                       .map((category) => (
-                        <div className="text-xs px-1 rounded-full shadow break-keep">
+                        <div
+                          key={category}
+                          className="text-xs px-1 rounded-full shadow break-keep"
+                        >
                           {category}
                         </div>
                       ))}
