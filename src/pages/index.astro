@@ -1,6 +1,7 @@
 ---
-import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
+import { Github } from "lucide-react";
+import { FaDiscord } from "react-icons/fa";
 import PersonFilter from "../components/person-filter";
 import ProjectFilter from "../components/project-filter";
 import ToolFilter from "../components/tool-filter";
@@ -28,14 +29,14 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
           target="_blank"
           class="hover:opacity-70 border border-transparent p-4 rounded hover:border-slate-400 transition-all"
         >
-          <Icon name="mdi:github" />
+          <Github size="32" />
         </a>
         <a
           href="https://discord.gg/pdpYk56SbZ"
           target="_blank"
           class="hover:opacity-70 border border-transparent p-4 rounded hover:border-slate-400 transition-all"
         >
-          <Icon name="ic:baseline-discord" />
+          <FaDiscord size="32" />
         </a>
       </div>
     </div>
