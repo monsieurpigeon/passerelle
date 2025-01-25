@@ -12,6 +12,20 @@ const allPersons = await getCollection("persons");
 const allTools = (await getCollection("tools")).sort((a, b) =>
   (a.data.Name || "").localeCompare(b.data.Name || "")
 );
+
+const cities = Object.entries(
+  allPersons.reduce(
+    (acc, person) => {
+      if (person.data.Ville) {
+        acc[person.data.Ville] = (acc[person.data.Ville] || 0) + 1;
+      }
+      return acc;
+    },
+    {} as { [key: string]: number }
+  )
+)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 10);
 ---
 
 <Layout>
@@ -40,23 +54,40 @@ const allTools = (await getCollection("tools")).sort((a, b) =>
         </a>
       </div>
     </div>
-    <div class="p-4 bg-lime-50 rounded shadow">
-      <h1 class="text-xl font-bold">Les niveaux d'un projet</h1>
-      <div class="flex items-center justify-center">
-        <ul class="list-decimal list-inside text-lg p-4 flex flex-col gap-2">
-          <li>Idée sous la douche</li>
-          <li>Prototype / Croquis</li>
-          <li>Produit qui sert à 1 utilisateur</li>
-          <li>Produit qui rapporte 1$</li>
-          <li>Produit qui rapporte 10$ par mois</li>
-          <li>Produit qui rapporte 100$ par mois</li>
-          <li>Produit qui rapporte 1k$ par mois</li>
-          <li>Produit qui rapporte 10k$ par mois</li>
-          <li>Produit qui rapporte 100k$ par mois</li>
-          <li>Licorne (évaluée à plus d'un milliard $)</li>
-        </ul>
+    <div class="grid grid-cols-2 gap-8">
+      <div class="p-4 bg-lime-50 rounded shadow">
+        <h1 class="text-xl font-bold">Les niveaux d'un projet</h1>
+        <div class="flex items-center justify-center">
+          <ul class="list-decimal list-inside text-lg p-4 flex flex-col gap-2">
+            <li>Idée sous la douche</li>
+            <li>Prototype / Croquis</li>
+            <li>Produit qui sert à 1 utilisateur</li>
+            <li>Produit qui rapporte 1$</li>
+            <li>Produit qui rapporte 10$ par mois</li>
+            <li>Produit qui rapporte 100$ par mois</li>
+            <li>Produit qui rapporte 1k$ par mois</li>
+            <li>Produit qui rapporte 10k$ par mois</li>
+            <li>Produit qui rapporte 100k$ par mois</li>
+            <li>Licorne (évaluée à plus d'un milliard $)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="p-4 bg-green-50 rounded shadow">
+        <h1 class="text-xl font-bold">Les villes des indies</h1>
+        <div class="flex items-center justify-center">
+          <ul class="list-decimal list-inside text-lg p-4 flex flex-col gap-2">
+            {
+              cities.map(([cityName, quantity]) => (
+                <li>
+                  {cityName} ({quantity})
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
     </div>
+
     <div class="flex flex-col gap-4 border p-4 bg-slate-300 rounded shadow">
       <PersonFilter client:load persons={allPersons} />
       <ProjectFilter client:load projects={allProjects} />
