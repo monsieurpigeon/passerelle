@@ -87,10 +87,22 @@ const cities = Object.entries(
         </div>
       </div>
     </div>
+    <div class="text-center text-xl opacity-60">
+      <span class="bg-slate-50 px-2 py-1 rounded shadow"
+        >{allProjects.length} Projets</span
+      >
+      par
+      <span class="bg-slate-50 px-2 py-1 rounded shadow"
+        >{allPersons.length} Indies</span
+      > avec
+      <span class="bg-slate-50 px-2 py-1 rounded shadow"
+        >{allTools.length} Outils</span
+      >
+    </div>
 
     <div class="flex flex-col gap-4 border p-4 bg-slate-300 rounded shadow">
-      <PersonFilter client:load persons={allPersons} />
       <ProjectFilter client:load projects={allProjects} />
+      <PersonFilter client:load persons={allPersons} />
       <ToolFilter client:load tools={allTools} />
     </div>
   </div>
