@@ -30,10 +30,12 @@ const cities = Object.entries(
 
 <Layout>
   <div class="p-8 flex flex-col gap-8">
-    <div class="flex justify-between">
-      <div>
+    <div
+      class="flex justify-between p-4 rounded-xl bg-gradient-to-bl from-slate-50/50 via-slate-200 to-slate-100/50 shadow"
+    >
+      <div class="ml-8">
         <h1 class="text-4xl font-bold opacity-70">La Passerelle</h1>
-        <p class="opacity-60">
+        <p class="text-gray-600">
           L'annuaire augmenté de Zefrenship, la commu Indie Hacker France 🇫🇷
         </p>
       </div>
@@ -41,21 +43,21 @@ const cities = Object.entries(
         <a
           href="https://github.com/monsieurpigeon/passerelle"
           target="_blank"
-          class="hover:opacity-70 border border-transparent p-4 rounded hover:border-slate-400 transition-all"
+          class="hover:outline border border-transparent p-4 rounded hover:border-slate-400 transition-all"
         >
           <Github size="32" />
         </a>
         <a
           href="https://discord.gg/pdpYk56SbZ"
           target="_blank"
-          class="hover:opacity-70 border border-transparent p-4 rounded hover:border-slate-400 transition-all"
+          class="hover:outline border border-transparent p-4 rounded hover:border-slate-400 transition-all"
         >
           <FaDiscord size="32" />
         </a>
       </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="p-4 bg-lime-50 rounded shadow">
+      <div class="p-4 bg-slate-100 rounded shadow">
         <h1 class="text-xl font-bold">Les niveaux d'un projet</h1>
         <div class="flex items-center justify-center">
           <ul class="list-decimal list-inside text-lg p-4 flex flex-col gap-2">
@@ -72,7 +74,7 @@ const cities = Object.entries(
           </ul>
         </div>
       </div>
-      <div class="p-4 bg-green-50 rounded shadow">
+      <div class="p-4 bg-slate-100 rounded shadow">
         <h1 class="text-xl font-bold">Les villes des indies</h1>
         <div class="flex items-center justify-center">
           <ul class="list-decimal list-inside text-lg p-4 flex flex-col gap-2">
@@ -100,7 +102,7 @@ const cities = Object.entries(
       >
     </div>
 
-    <div class="flex flex-col gap-4 border p-4 bg-slate-300 rounded shadow">
+    <div class="flex flex-col gap-4 border p-4 bg-slate-200 rounded shadow">
       <ProjectFilter client:load projects={allProjects} />
       <PersonFilter client:load persons={allPersons} />
       <ToolFilter client:load tools={allTools} />
